@@ -33,7 +33,19 @@ module Cell
 
 
     module Metal
-      delegate :session, :params, :request, :config, :env, :url_options, :to => :parent_controller
+      DelegatedMethods = [:session, :params, :request, :config, :env, :url_options]
+      
+      DelegatedMethods.each do |meth|
+        delegate meth, :to => :parent_controller
+      end
+      
+      def respond_to?(meth, include_private = false)
+        if DelegatedMethods.include? meth
+          parent_controller.respond_to?(meth, include_private)
+        else
+          super
+        end
+      end
     end 
     
     

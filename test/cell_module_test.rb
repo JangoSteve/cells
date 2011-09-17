@@ -22,6 +22,10 @@ class CellModuleTest < ActiveSupport::TestCase
         assert_equal "Doo", Cell::Base.render_cell_for(@controller, :bassist, :play)
       end
       
+      should "render a cell without a controller" do
+        assert_equal "Doo", Cell::Base.render_cell_for(nil, :bassist, :play)
+      end
+      
       should "accept a block, passing the cell instance" do
         flag = false
         html = Cell::Base.render_cell_for(@controller, :bassist, :play) do |cell|
