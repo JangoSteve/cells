@@ -33,14 +33,11 @@ module Cell
 
 
     module Metal
-      DelegatedMethods = [:session, :params, :request, :config, :env, :url_options]
-      
-      DelegatedMethods.each do |meth|
-        delegate meth, :to => :parent_controller
-      end
+      DELEGATED_METHODS = [:session, :params, :request, :config, :env, :url_options]
+      delegate *(DELEGATED_METHODS << {:to => :parent_controller})
       
       def respond_to?(meth, include_private = false)
-        if DelegatedMethods.include? meth
+        if DELEGATED_METHODS.include? meth && parent_controller
           parent_controller.respond_to?(meth, include_private)
         else
           super
